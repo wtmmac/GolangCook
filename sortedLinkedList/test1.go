@@ -18,7 +18,9 @@ func main() {
         WordCount{"kate", 87},
         WordCount{"herry", 92},
         WordCount{"james", 81}}
+
     var aSortedLinkedList = SortedLinkedList.NewSortedLinkedList(10, compareValue)
+
     for _, wordCount := range wordCounts {
         aSortedLinkedList.PutOnTop(wordCount)
     }
