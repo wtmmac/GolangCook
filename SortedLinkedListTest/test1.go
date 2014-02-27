@@ -4,6 +4,7 @@ import (
 	"GolangTest/SortedLinkedList"
 	"GolangTest/danmuCache2"
 	"fmt"
+	"unsafe"
 )
 
 var (
@@ -60,9 +61,20 @@ func main() {
 	// get cache
 	if v, ok := dmCache.Get("1"); ok {
 		// 返回弹幕
-		fmt.Println(v.String())
+		//fmt.Println(v.String())
 		fmt.Println("==\t==")
-		fmt.Println(v["1"][1].Content)
+		//fmt.Println(v["1"][1].Content
+
+		fmt.Println("==内存占用==\n")
+		fmt.Println(v["1"][1])
+		fmt.Println("总占用:", unsafe.Sizeof(v["1"][1]), "字节")
+		fmt.Println("Zhiren占用:", unsafe.Sizeof(v["1"][1].Zhiren), "字节")
+		fmt.Println("Content占用:", unsafe.Sizeof(v["1"][1].Content), "字节")
+		fmt.Println("Timestamp占用:", unsafe.Sizeof(v["1"][1].Timestamp), "字节")
+
+		i := int(1)
+		fmt.Println("int占用：", unsafe.Sizeof(i))
+
 	} else {
 		fmt.Println("no value")
 	}

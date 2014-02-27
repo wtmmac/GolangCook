@@ -36,7 +36,7 @@ type Cache struct {
 
 // 弹幕分钟内每条数据的数据结构
 type DanmuMinute struct {
-	Zhiren    int
+	Zhiren    int8
 	Content   string
 	Timestamp int
 }
