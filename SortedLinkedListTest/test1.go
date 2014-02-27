@@ -2,7 +2,7 @@ package main
 
 import (
 	"GolangTest/SortedLinkedList"
-	"danmuCache2"
+	"GolangTest/danmuCache2"
 	"fmt"
 )
 
