@@ -27,7 +27,7 @@ func main() {
 	go receiveCakeAndPack(cs)
 
 	//休眠一段时间以防程序立即退出
-	time.Sleep(4 * 1e9)
+	time.Sleep(4 * time.Second)
 
-	fmt.Println(4 * 1e9)
+	fmt.Println(4 * time.Second)
 }

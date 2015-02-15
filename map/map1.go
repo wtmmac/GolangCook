@@ -12,5 +12,13 @@ func main() {
 	}
 
 	str := "hel"
-	fmt.Println(strings.Index(str, "a"))
+	
+	if strings.Index(str, "a") > 0 {
+		fmt.Println("find")
+	} else {
+		fmt.Println("not find")
+	}
+	
+	
+	fmt.Println(ages)
 }

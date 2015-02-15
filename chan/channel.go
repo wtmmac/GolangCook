@@ -18,4 +18,6 @@ func main() {
 	for _, ch := range chs {
 		<-ch
 	}
+
+    //fmt.Println("this is a test")
 }
