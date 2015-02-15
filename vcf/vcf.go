@@ -20,6 +20,7 @@ type Vcard struct {
 }
 
 func main() {
+	fmt.Println("starting..\n")
 	vcfFile := "test.vcf"
 	f, err := os.Open(vcfFile)
 	defer f.Close()
