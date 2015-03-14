@@ -4,18 +4,17 @@ import (
 	"fmt"
 )
 
-var c = make(chan int, 10)
-var a string
+var c = make(chan bool)
+var str1 string
 
 func f() {
-	a = "hello, world"
-	c <- 2
+	str1 = "f() => hello, world"
+	fmt.Println(str1)
+	c <- true
 }
 
 func main() {
 	go f()
-	intOut := <-c
-	print(a)
-	fmt.Println("Hello World!")
-	print(intOut)
+	_ = <-c
+	fmt.Println("main() => Hello World!")
 }
