@@ -47,7 +47,7 @@ func main() {
 	// 第一分钟
 	danmu["1"] = []danmuCache2.DanmuMinute{
 		danmuCache2.DanmuMinute{1, "测试", 1300002101},
-		danmuCache2.DanmuMinute{2, "测试", 1300002101},
+		danmuCache2.DanmuMinute{2, "测试测试测试测试测试测试测试测试测试测试", 1300002101},
 		danmuCache2.DanmuMinute{3, "测试", 1300002101}}
 
 	// 第二分钟
@@ -69,11 +69,17 @@ func main() {
 		fmt.Println(v["1"][1])
 		fmt.Println("总占用:", unsafe.Sizeof(v["1"][1]), "字节")
 		fmt.Println("Zhiren占用:", unsafe.Sizeof(v["1"][1].Zhiren), "字节")
-		fmt.Println("Content占用:", unsafe.Sizeof(v["1"][1].Content), "字节")
+		fmt.Println("Content占用:", len(v["1"][1].Content), "字节")
 		fmt.Println("Timestamp占用:", unsafe.Sizeof(v["1"][1].Timestamp), "字节")
 
 		i := int(1)
 		fmt.Println("int占用：", unsafe.Sizeof(i))
+		fmt.Println("========")
+
+		for DanmuKey, DanmuValue := range v["1"] {
+			fmt.Println(DanmuKey)
+			fmt.Println(DanmuValue)
+		}
 
 	} else {
 		fmt.Println("no value")

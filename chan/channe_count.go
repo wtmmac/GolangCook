@@ -5,25 +5,22 @@ import "fmt"
 func main() {
 
 	chs := make(chan int, 10)
-	fmt.Println(len(chs))
 
-	for i := 0; i < 11; i++ {
+	for i := 0; i < 10; i++ {
 		chs <- i
 	}
 
-	fmt.Println(len(chs))
+	fmt.Println("Channel chs的长度:", len(chs))
 
+loopLabel:
 	for {
 		select {
 		case value := <-chs:
 			fmt.Println(value)
 		default:
-			fmt.Println("default")
-			fmt.Println(len(chs))
-			break
+			break loopLabel
 		}
-
 	}
 
-    fmt.Println(len(chs))
+	fmt.Println("Channel chs的长度:", len(chs))
 }
