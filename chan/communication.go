@@ -5,14 +5,13 @@ var a string
 
 func f() {
 	a = "hello, world"
-    print("function f")
-    //c <- 0
+	print("function f")
+	//c <- 0
 }
 
 func main() {
 	go f()
 	//<-c
-    print("main function")
-    print(a)
+	print("main function")
+	print(a)
 }
-
