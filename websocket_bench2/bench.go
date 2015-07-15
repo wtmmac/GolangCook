@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+// tester
 func websocketTester(URL string, gorutineNumber int) {
 	parsedURL, err := url.Parse(URL)
 
@@ -41,7 +42,7 @@ func websocketTester(URL string, gorutineNumber int) {
 			log.Fatal(err)
 		}
 		dataBuffer.Write(msg[:n])
-		fmt.Printf("Gorutine %7d\tReceived: %s,\t%s\n", gorutineNumber, dataBuffer.String(), time.Now().Format("2006-01-02 15:04:05"))
+		fmt.Printf("Gorutine %7d received\n", gorutineNumber)
 		dataBuffer.Reset()
 	}
 }
