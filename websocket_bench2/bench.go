@@ -26,6 +26,8 @@ func websocketTester(URL string, gorutineNumber int) {
 		log.Fatal(err)
 	}
 
+	fmt.Printf(">>>websocketTester started:%7d\n", gorutineNumber)
+
 	message := []byte("hello, world!")
 	_, err = ws.Write(message)
 	if err != nil {
@@ -42,7 +44,7 @@ func websocketTester(URL string, gorutineNumber int) {
 			log.Fatal(err)
 		}
 		dataBuffer.Write(msg[:n])
-		fmt.Printf("Gorutine %7d received\n", gorutineNumber)
+		fmt.Printf("websocketTester %7d received\n", gorutineNumber)
 		dataBuffer.Reset()
 	}
 }
@@ -58,8 +60,7 @@ func main() {
 
 	time.Sleep(time.Second * 3)
 	for i := 0; i < n; i++ {
-		time.Sleep(time.Millisecond * 10)
-		fmt.Printf(">>>tester started:%7d\n", i+1)
+		time.Sleep(time.Millisecond * 5)
 		go websocketTester(ws, i+1)
 	}
 
