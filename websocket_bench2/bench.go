@@ -50,20 +50,31 @@ func websocketTester(URL string, gorutineNumber int) {
 }
 
 func main() {
+	// websocket address
 	var ws string
 	flag.StringVar(&ws, "ws", "ws://localhost:7001/dmlive/new-msg/socket/658", "websocket address")
+
+	// Number of requests to perform
 	var n int
 	flag.IntVar(&n, "n", 1, "Number of requests to perform")
+
+	// Interval of starting websocketTester
+	var interval int
+	flag.IntVar(&interval, "i", 10, "Interval of starting websocketTester(Unit:Millisecond)")
+
 	flag.Parse()
+
 	fmt.Printf(".\n testing target is %s\n", ws)
 	fmt.Println("\x1b[43;31m\nControl + C to terminate the programme!\x1b[0m\n")
-
 	time.Sleep(time.Second * 3)
+
+	// Starting websocketTester
 	for i := 0; i < n; i++ {
-		time.Sleep(time.Millisecond * 5)
+		time.Sleep(time.Millisecond * time.Duration(interval))
 		go websocketTester(ws, i+1)
 	}
 
+	// Setting up Signal of SIGINT
 	sc := make(chan os.Signal)
 	var sig os.Signal
 	signal.Notify(sc, syscall.SIGINT)
