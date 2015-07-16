@@ -64,10 +64,11 @@ func main() {
 	}
 
 	sc := make(chan os.Signal)
+	var sig os.Signal
 	signal.Notify(sc, syscall.SIGINT)
 
 	for {
-		sig := <-sc
+		sig = <-sc
 		switch sig {
 		case syscall.SIGINT:
 			println("SIGINT is received")
