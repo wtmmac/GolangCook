@@ -35,24 +35,16 @@ func ChatroomServer(ws *websocket.Conn) {
 }
 
 func SendMessage(self *list.Element, data string) {
-	print("\nenter sendmessage\n")
-
 	for item := conns.Front(); item != nil; item = item.Next() {
-
 		ws, ok := item.Value.(*websocket.Conn)
-
 		if !ok {
 			panic("item not *websocket.Conn")
 		}
-
 		if item == self {
 			continue
 		}
-
 		io.WriteString(ws, data)
-		print("write......\n")
 	}
-	print("exit sendmessage\n")
 }
 
 func Client(w http.ResponseWriter, r *http.Request) {
