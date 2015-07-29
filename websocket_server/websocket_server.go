@@ -20,7 +20,7 @@ func ChatroomServer(ws *websocket.Conn) {
 	item := conns.PushBack(ws)
 	//conns.Remove(item)
 	name := fmt.Sprintf("user%d", id)
-	SendMessage(nil, fmt.Sprintf("welcome %s join\n", name))
+	//SendMessage(nil, fmt.Sprintf("welcome %s join\n", name))
 	r := bufio.NewReader(ws)
 	for {
 		data, err := r.ReadBytes('\n')
@@ -51,7 +51,6 @@ func Client(w http.ResponseWriter, r *http.Request) {
 	html := "这里是一段html代码，呵呵！这个html代码中含有javascript脚本，脚本中含有创建websocket的代码，由于微博会将这段代码渲染成网页，所以暂时消除这段代码！"
 	io.WriteString(w, html)
 	SendMessage(nil, "ttttttttt")
-	print("client......\n")
 }
 
 func main() {
