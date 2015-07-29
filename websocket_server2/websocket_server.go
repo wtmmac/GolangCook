@@ -22,8 +22,7 @@ type conn struct {
 }
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
-	html := `
-	<!DOCTYPE html>
+	html := `<!DOCTYPE html>
 	<html>
 	<head>
 		<title>chat demo</title>
@@ -65,8 +64,8 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	})();
 	</script>
 	</body>
-	</html>
-	`
+	</html>`
+
 	io.WriteString(w, html)
 }
 
@@ -105,7 +104,7 @@ func ChatroomServer(ws *websocket.Conn) {
 	fmt.Printf("connected to liveid: %d\n", liveid)
 	conn_instance := &conn{ws: ws, liveid: liveid, uid: connid}
 	item := conns.PushBack(conn_instance)
-	//	name := fmt.Sprintf("user%d", id)
+	//name := fmt.Sprintf("user%d", id)
 	//SendMessage(nil, fmt.Sprintf("welcome %s join\n", name))
 	r := bufio.NewReader(ws)
 	for {
