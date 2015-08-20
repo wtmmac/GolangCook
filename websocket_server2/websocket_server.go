@@ -129,9 +129,9 @@ func SendMessage(self *list.Element, data string, liveid int) {
 			panic("item not *websocket.Conn")
 		}
 
-		if item == self {
-			continue
-		}
+		//		if item == self {
+		//			continue
+		//		}
 
 		// liveid为0时发送给所有客户端，liveid大于0时只发送给等于liveid的客户端
 		if liveid == 0 || liveid > 0 && liveid == conn_instance.liveid {
@@ -188,7 +188,7 @@ func main() {
 	r.HandleFunc("/crossdomain.xml", CrossDomain)
 	http.Handle("/", r)
 
-	err := http.ListenAndServe(":9090", nil)
+	err := http.ListenAndServe(":7001", nil)
 	if err != nil {
 		panic("ListenAndServe: " + err.Error())
 	}
