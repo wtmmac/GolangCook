@@ -1,7 +1,7 @@
 package main
 
 import (
-	//	"fmt"
+	//"fmt"
 	"github.com/bitly/go-simplejson"
 	"testing"
 )
@@ -14,25 +14,27 @@ import (
 //}
 
 func BenchmarkJson(b *testing.B) {
-	body := `
-	  {"response": {
-	  "status": "SUCCESS",
-	  "data": {
-	    "mxRecords": [
-	      {
-	        "value": "us2.mx3.mailhostbox.com.",
-	        "ttl": 1,
-	        "priority": 100,
-	        "hostName": "hostname1"
-	      }
-	    ]
-		}}}`
+	body := `{"user_code":"102852181","userPic":"http://static.youku.com/user/img/avatar/80/14.jpg","pos":3,"color":16777215,"commit_time":1448265594848,"effect":0,"data":"asdfasdfasfafsf","alpha":1,"size":1,"msgtype":2,"userName":"tony大天"}`
 
 	for i := 0; i < b.N; i++ {
-		_, err := simplejson.NewJson([]byte(body))
+		json, err := simplejson.NewJson([]byte(body))
 		if err != nil {
 			panic(err.Error())
 		}
+		if json != nil {
+			json.Get("msgtype").MustInt()
+			json.Get("msgtype").MustInt()
+			json.Get("msgtype").MustInt()
+			json.Get("msgtype").MustInt()
+			json.Get("msgtype").MustInt()
+			json.Get("userName").MustString()
+			json.Get("userName").MustString()
+			json.Get("userName").MustString()
+			json.Get("userName").MustString()
+			json.Get("userName").MustString()
+			json.Get("userName").MustString()
+		}
+		//fmt.Println(json.Get("msgtype").MustInt())
 	}
 	//	fmt.Println(js)
 	//	fmt.Println(js.Get("response").Get("status").String())
