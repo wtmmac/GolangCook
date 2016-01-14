@@ -14,6 +14,8 @@ func findLastId() int {
 	info, _ := os.Stat(filename)
 	filesize := info.Size()
 
+	fmt.Println(filesize)
+
 	var data string
 	id := 0
 
@@ -29,6 +31,10 @@ func findLastId() int {
 
 	for i := 1; i <= 1024; i++ {
 		offset := filesize - int64(i)
+		fmt.Printf("offset:%d\n", offset)
+		if offset < 0 {
+			break
+		}
 		_, err := f.ReadAt(buf, offset)
 		if err != nil || io.EOF == err {
 			panic(err)
@@ -47,7 +53,7 @@ func findLastId() int {
 				}
 
 				dataSlice := strings.Split(data, "|")
-				if len(dataSlice) > 0 {
+				if len(dataSlice) > 1 {
 					id, _ = strconv.Atoi(dataSlice[1])
 				}
 				//fmt.Println(data)
