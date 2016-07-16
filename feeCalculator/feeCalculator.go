@@ -28,14 +28,15 @@ func main() {
 			break
 		} else {
 			//	fmt.Printf("%v", line)
-			task := strings.Split(strings.TrimRight(line, "\r\n"), ",")
-			data, err := strconv.Atoi(task[1])
+			task := strings.Split(strings.TrimRight(line, "\r\n"), " ")
+			data, err := strconv.Atoi(task[0])
 			if err != nil {
 				fmt.Printf("%v\n", err)
 				os.Exit(1)
 			}
+			//Charging Standard 0.36/G
 			result := float32(data) * 0.0005 * 0.36
-			fmt.Println(task[0], result)
+			fmt.Printf("%s,%6.2f\n", task[1], result)
 		}
 	}
 
