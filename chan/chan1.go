@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 var c = make(chan bool)
@@ -16,5 +17,9 @@ func f() {
 func main() {
 	go f()
 	_ = <-c
+	for i := 0; i < 10000; i++ {
+		time.Sleep(5 * time.Second)
+		fmt.Println("sleep")
+	}
 	fmt.Println("main() => Hello World!")
 }

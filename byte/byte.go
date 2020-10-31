@@ -5,8 +5,9 @@ import (
 )
 
 func main() {
-	//opcodeByte := make([]byte, 1)
+	// opcodeByte := make([]byte, 1)
 	opcodeByte := []byte("Fasdfasdfasdf")
+	fmt.Printf("%d Bytes\n\n", len(opcodeByte))
 	opcodeByte[0] = opcodeByte[0] | 127
 
 	FIN := opcodeByte[0] >> 7

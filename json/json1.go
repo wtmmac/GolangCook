@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -17,8 +16,6 @@ type Config struct {
 }
 
 func main() {
-	fmt.Println("Hello World!")
-
 	var cnf = Config{
 		Broker:        "amqp://guest:guest@localhost:5672/",
 		ResultBackend: "amqp",

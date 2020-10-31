@@ -3,11 +3,12 @@ package main
 // GBK编码输出（适合Windows）
 
 import (
-	"code.google.com/p/mahonia"
 	"fmt"
 	"net"
 	"os"
 	"strings"
+
+	"code.google.com/p/mahonia"
 )
 
 func main() {
