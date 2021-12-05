@@ -17,8 +17,8 @@ func f() {
 func main() {
 	go f()
 	_ = <-c
-	for i := 0; i < 10000; i++ {
-		time.Sleep(5 * time.Second)
+	for i := 0; i < 2; i++ {
+		time.Sleep(1 * time.Second)
 		fmt.Println("sleep")
 	}
 	fmt.Println("main() => Hello World!")
