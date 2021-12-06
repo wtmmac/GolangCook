@@ -1,9 +1,9 @@
 package main
 
 import (
-	"GolangTest/SortedLinkedList"
-	"GolangTest/danmuCache2"
 	"fmt"
+	"github.com/wtmmac/GolangTest/SortedLinkedList"
+	"github.com/wtmmac/GolangTest/danmuCache2"
 	"unsafe"
 )
 
@@ -27,15 +27,16 @@ func main() {
 	dmCache = danmuCache2.New(0)
 
 	wordCounts := []WordCount{
-		WordCount{"kate", 87},
-		WordCount{"herry", 92},
-		WordCount{"james", 81}}
+		{"Kate", 87},
+		{"Henry", 92},
+		{"James", 81}}
 
 	var aSortedLinkedList = SortedLinkedList.NewSortedLinkedList(10, compareValue)
 
 	for _, wordCount := range wordCounts {
 		aSortedLinkedList.PutOnTop(wordCount)
 	}
+
 	for element := aSortedLinkedList.List.Front(); element != nil; element = element.Next() {
 		fmt.Println(element.Value.(WordCount))
 	}
@@ -46,15 +47,15 @@ func main() {
 
 	// 第一分钟
 	danmu["1"] = []danmuCache2.DanmuMinute{
-		danmuCache2.DanmuMinute{1, "测试", 1300002101},
-		danmuCache2.DanmuMinute{2, "测试测试测试测试测试测试测试测试测试测试", 1300002101},
-		danmuCache2.DanmuMinute{3, "测试", 1300002101}}
+		{1, "测试", 1300002101},
+		{2, "测试测试测试测试测试测试测试测试测试测试", 1300002101},
+		{3, "测试", 1300002101}}
 
 	// 第二分钟
 	danmu["2"] = []danmuCache2.DanmuMinute{
-		danmuCache2.DanmuMinute{0, "测试", 1300002101},
-		danmuCache2.DanmuMinute{0, "测试", 1300002101},
-		danmuCache2.DanmuMinute{0, "测试", 1300002101}}
+		{0, "测试", 1300002101},
+		{0, "测试", 1300002101},
+		{0, "测试", 1300002101}}
 
 	dmCache.Add(id, danmu)
 
