@@ -1,1 +1,3 @@
-module "GolangTest"
+module GolangTest
+
+go 1.14
