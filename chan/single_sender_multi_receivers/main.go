@@ -9,10 +9,7 @@ import (
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	rand.Seed(time.Now().UnixNano())
-
 	log.SetFlags(0)
-
 	// ...
 	const MaxRandomNumber = 100000
 	const NumReceivers = 100
