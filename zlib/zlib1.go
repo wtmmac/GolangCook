@@ -8,7 +8,7 @@ import (
 	// "os"
 )
 
-// zlib压缩
+// DoZlibCompress zlib压缩
 func DoZlibCompress(src []byte) []byte {
 	var in bytes.Buffer
 	w := zlib.NewWriter(&in)
@@ -17,7 +17,7 @@ func DoZlibCompress(src []byte) []byte {
 	return in.Bytes()
 }
 
-// zlib解压缩
+// DoZlibUnCompress zlib解压缩
 func DoZlibUnCompress(compressSrc []byte) []byte {
 	b := bytes.NewReader(compressSrc)
 	var out bytes.Buffer

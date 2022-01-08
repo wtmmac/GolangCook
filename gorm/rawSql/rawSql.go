@@ -26,6 +26,7 @@ func main() {
 	db.Raw("SELECT id, name, age FROM user WHERE name = ?", "小刚").Scan(&result)
 	fmt.Println(result)
 
+	fmt.Println("query all records")
 	// Raw SQL
 	rows, err := db.Raw("SELECT id, name, age FROM user").Rows()
 	defer rows.Close()
@@ -33,5 +34,4 @@ func main() {
 		db.ScanRows(rows, &result)
 		fmt.Println(result.Name)
 	}
-
 }

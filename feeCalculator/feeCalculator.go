@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	fmt.Println("starting..\n")
+	fmt.Println("starting..")
 	logFile := "log.txt"
 	f, err := os.Open(logFile)
 	defer f.Close()

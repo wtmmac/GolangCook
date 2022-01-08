@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"code.google.com/p/mahonia"
+	"github.com/axgle/mahonia"
 )
 
 func main() {
