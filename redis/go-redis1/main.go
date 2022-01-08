@@ -6,19 +6,26 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var ctx = context.Background()
-
-func main() {
-	client := redis.NewClient(&redis.Options{
+var (
+	ctx    = context.Background()
+	client = redis.NewClient(&redis.Options{
 		Addr:     "127.0.0.1:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
+)
 
+func main() {
 	pong, err := client.Ping(ctx).Result()
 	fmt.Println(pong, err)
 
-	err = client.Set(ctx, "key", "value", 0).Err()
+	strings()
+	hashes()
+}
+
+func strings() {
+	fmt.Println("\nstrings started.======")
+	err := client.Set(ctx, "key", "value", 0).Err()
 	if err != nil {
 		panic(err)
 	}
@@ -37,4 +44,22 @@ func main() {
 	} else {
 		fmt.Println("key2", val2)
 	}
+}
+
+func hashes() {
+	fmt.Println("\nhashes started.======")
+	client.HSet(ctx, "myHash", "field1", "value1", "field2", "value2")
+	field1, err := client.HGet(ctx, "myHash", "field1").Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("field1:", field1)
+
+	myHash, err := client.HGetAll(ctx, "myHash").Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("myHash:", myHash)
+
+	_ = client.HDel(ctx, "myHash", "key2")
 }
