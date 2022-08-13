@@ -22,6 +22,5 @@ func main() {
 
 	student := &models.Student{}
 	db.First(student)
-
 	fmt.Println(student)
 }
