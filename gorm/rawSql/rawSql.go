@@ -32,6 +32,6 @@ func main() {
 	defer rows.Close()
 	for rows.Next() {
 		db.ScanRows(rows, &result)
-		fmt.Println(result.Name)
+		fmt.Println(result.Name, result.Age)
 	}
 }
