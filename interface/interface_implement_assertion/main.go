@@ -12,7 +12,9 @@ func main() {
 		// 类型转换
 		mErr, ok := err.(*MyError)
 		if ok {
-			fmt.Println(mErr.Code)
+			fmt.Println("MyError:" , mErr.Code)
+		} else {
+			fmt.Println("false")
 		}
 	}
 
