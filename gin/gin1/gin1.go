@@ -5,18 +5,28 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
 type User struct {
 	Name string `json:"name" binding:"required"`
-	Age  int    `json:"age"`
+	Age  int    `json:"age" binding:"required"`
 }
 
-func main() {
+func removeTopStruct(fields map[string]string) map[string]string {
+	res := map[string]string{}
+	for field, err := range fields {
+		res[field[strings.Index(field, ".")+1:]] = err
+	}
+	return res
+}
+
+func main() {var Age int
 	gin.SetMode(gin.DebugMode)
 	router := gin.New()
 	router.Use(LoggerByTime()) //中间件：日志
@@ -32,13 +42,28 @@ func main() {
 			)
 			err := c.ShouldBindJSON(&user)
 			if err != nil {
-				fmt.Println("Add：" + err.Error())
-				rtn.R = 0
-				rtn.Err = err.Error()
-				c.JSON(http.StatusInternalServerError, rtn)
-				panic(err)
+				// 获取validator.ValidationErrors类型的errors
+				if errs, ok := err.(validator.ValidationErrors);ok {
+					// validator.ValidationErrors类型错误直接返回
+					c.JSON(http.StatusOK, gin.H{
+						"msg": errs.Error(),
+					})
+					return
+				}
+				c.JSON(http.StatusOK, gin.H{
+					"msg": err.Error(),
+				})
 				return
+				//fmt.Println("Add：" + err.Error())
+				//rtn.R = 0
+				//rtn.Err = err.Error()
+				//c.JSON(http.StatusInternalServerError, rtn)
+				//panic(err)
+				//return
 			}
+
+
+
 			fmt.Println(GetLogFileName(), "添加了一个用户，名="+user.Name+",年龄="+strconv.Itoa(user.Age))
 			rtn.R = 1
 			c.JSON(http.StatusOK, rtn)

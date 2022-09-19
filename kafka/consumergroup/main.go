@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -13,7 +14,7 @@ import (
 	"github.com/Shopify/sarama"
 )
 
-// Sarma configuration options
+// Sarama configuration options
 var (
 	brokers = ""
 	version = ""
@@ -28,20 +29,23 @@ func init() {
 	flag.StringVar(&group, "group", "", "Kafka consumer group definition")
 	flag.StringVar(&version, "version", "2.1.1", "Kafka cluster version")
 	flag.StringVar(&topics, "topics", "", "Kafka topics to be consumed, as a comma seperated list")
-	flag.BoolVar(&oldest, "oldest", true, "Kafka consumer consume initial ofset from oldest")
+	flag.BoolVar(&oldest, "oldest", true, "Kafka consumer consume initial offset from oldest")
 	flag.BoolVar(&verbose, "verbose", false, "Sarama logging")
 	flag.Parse()
 
 	if len(brokers) == 0 {
-		panic("no Kafka bootstrap brokers defined, please set the -brokers flag")
+		fmt.Println("no Kafka bootstrap brokers defined, please set the -brokers flag")
+		os.Exit(1)
 	}
 
 	if len(topics) == 0 {
-		panic("no topics given to be consumed, please set the -topics flag")
+		fmt.Println("no topics given to be consumed, please set the -topics flag")
+		os.Exit(1)
 	}
 
 	if len(group) == 0 {
-		panic("no Kafka consumer group defined, please set the -group flag")
+		fmt.Println("no Kafka consumer group defined, please set the -group flag")
+		os.Exit(1)
 	}
 }
 
@@ -101,7 +105,7 @@ func main() {
 	log.Println("Sarama consumer up and running!...")
 
 	sigterm := make(chan os.Signal, 1)
-	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM, syscall.)
 	select {
 	case <-ctx.Done():
 		log.Println("terminating: context cancelled")
