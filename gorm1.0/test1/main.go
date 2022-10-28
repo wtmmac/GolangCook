@@ -51,7 +51,7 @@ func main() {
 	//db = db.Where(condition.Student, condition.Fields)
 	db = db.Where(&Student{
 		Name: "wyf1",
-		//Age: 0,
+		Age:  0,
 	})
 	err = db.Debug().
 		// Select("id","name").

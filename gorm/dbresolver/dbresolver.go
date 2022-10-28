@@ -25,6 +25,4 @@ func main() {
 		Policy: dbresolver.RandomPolicy{},
 	}))
 
-
-
 }
