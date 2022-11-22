@@ -53,7 +53,7 @@ func Server() {
 			if err != nil {
 				fmt.Println(Show(err.Error()))
 			}
-			fmt.Println(data[0:c])
+			fmt.Println(string(data[0:c]))
 			fmt.Println("收到:", c, " bytes\n")
 			client.Write([]byte("你好客户端!\r\n"))
 			client.Close()
