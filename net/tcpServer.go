@@ -24,7 +24,7 @@ func main() {
 	}
 }
 
-// 编辑转换（Todo）
+// Show 编辑转换（Todo）
 func Show(s string) string {
 	return s
 }
@@ -32,7 +32,7 @@ func Show(s string) string {
 func Server() {
 	exit := make(chan bool)
 	ip := net.ParseIP("127.0.0.1")
-	addr := net.TCPAddr{ip, 9872, ""}
+	addr := net.TCPAddr{IP: ip, Port: 9872}
 	go func() {
 		listen, err := net.ListenTCP("tcp", &addr)
 		if err != nil {
@@ -55,8 +55,8 @@ func Server() {
 			}
 			fmt.Println(string(data[0:c]))
 			fmt.Println("收到:", c, " bytes\n")
-			client.Write([]byte("你好客户端!\r\n"))
-			client.Close()
+			_, _ = client.Write([]byte("你好客户端!\r\n"))
+			_ = client.Close()
 		}
 	}()
 	<-exit
@@ -69,8 +69,16 @@ func Client() {
 		fmt.Println(Show("服务端连接失败"), Show(err.Error()))
 		return
 	}
-	defer client.Close()
-	client.Write([]byte("你好,服务端!"))
+	defer func(client net.Conn) {
+		err := client.Close()
+		if err != nil {
+			fmt.Println("Encounter an error when closing the connection")
+		}
+	}(client)
+	_, err = client.Write([]byte("你好,服务端!"))
+	if err != nil {
+		return
+	}
 	buf := make([]byte, 1024)
 	c, err := client.Read(buf)
 	if err != nil {
