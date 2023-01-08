@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Student struct {
@@ -21,6 +23,8 @@ type StudentFields struct {
 }
 
 func main() {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
 	dsn := "root:root@tcp(127.0.0.1:3306)/test2?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -41,7 +45,7 @@ func main() {
 	var students []Student
 
 	db = db.Where(studentFields.Student, studentFields.Fields)
-	err = db.Debug().
+	err = db.WithContext(ctx).Debug().
 		Find(&students).Error
 
 	if err != nil {

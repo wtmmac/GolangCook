@@ -24,7 +24,7 @@ func test1() {
 }
 
 // 确认子context的key是否覆盖父context
-func test2(){
+func test2() {
 	fmt.Println("++test2++++++++++++++++++++=")
 	ctx := context.Background()
 	var keyA string = "key"
