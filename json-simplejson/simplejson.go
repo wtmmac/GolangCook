@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	simplejson "github.com/bitly/go-simplejson"
+	"github.com/bitly/go-simplejson"
 )
 
 type MediaInfo struct {
