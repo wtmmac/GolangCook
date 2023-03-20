@@ -19,9 +19,9 @@ func chan1() {
 
 func main() {
 	go chan1()
-	//_ = <-c
+	_ = <-c
 	//for i := 0; i < 2; i++ {
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 	//	fmt.Println("sleep")
 	//}
 	fmt.Println("main() => Hello World!")

@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func http_get(http_url string) string {
+func httpGet(http_url string) string {
 
 	if !strings.HasPrefix(http_url, "http") {
 		http_url = "http://" + http_url
@@ -73,9 +73,9 @@ func http_get(http_url string) string {
 	return string(body)
 }
 func main() {
-	var result = http_get("http://www.tudou.com")
+	var result = httpGet("http://www.baidu.com")
 	fmt.Println(result)
 
-	var result2 = http_get("https://auth.alipay.com/login/index.htm")
-	fmt.Println(result2)
+	//var result2 = httpGet("https://auth.alipay.com/login/index.htm")
+	//fmt.Println(result2)
 }

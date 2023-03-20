@@ -26,7 +26,20 @@ func removeTopStruct(fields map[string]string) map[string]string {
 	return res
 }
 
-func main() {var Age int
+//var timeNow = time.Now
+var timeNow = func() time.Time {
+	return time.Date(2020, 11, 12, 0, 0, 0, 0, time.UTC)
+}
+
+func GenerateTimestamp() int64 {
+	now := timeNow()  // current local time
+	sec := now.Unix() // number of seconds since January 1, 1970 UTC
+
+	return sec // int 64
+}
+
+func main() {
+	//var Age int
 	gin.SetMode(gin.DebugMode)
 	router := gin.New()
 	router.Use(LoggerByTime()) //中间件：日志
@@ -43,7 +56,7 @@ func main() {var Age int
 			err := c.ShouldBindJSON(&user)
 			if err != nil {
 				// 获取validator.ValidationErrors类型的errors
-				if errs, ok := err.(validator.ValidationErrors);ok {
+				if errs, ok := err.(validator.ValidationErrors); ok {
 					// validator.ValidationErrors类型错误直接返回
 					c.JSON(http.StatusOK, gin.H{
 						"msg": errs.Error(),
@@ -61,8 +74,6 @@ func main() {var Age int
 				//panic(err)
 				//return
 			}
-
-
 
 			fmt.Println(GetLogFileName(), "添加了一个用户，名="+user.Name+",年龄="+strconv.Itoa(user.Age))
 			rtn.R = 1
@@ -94,13 +105,14 @@ func main() {var Age int
 			c.JSON(http.StatusOK, rtn)
 		})
 	}
-	apiOut := router.Group("/mobile").Use(AuthRequiredMobile) //mobile开头的路由中间件:验证
+	apiOut := router.Group("/mobile").Use() //mobile开头的路由中间件:验证
 	{
 		apiOut.GET("/detail", func(c *gin.Context) { //参数方式：query
 			var rtn Rtn
 			name := c.Query("name")
 			fmt.Println(GetLogFileName(), "详情："+"该用户名="+name)
 			rtn.R = 1
+			rtn.Data = name + strconv.FormatInt(GenerateTimestamp(), 10)
 			c.JSON(http.StatusOK, rtn)
 		})
 	}
