@@ -1,15 +1,14 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net/http"
 	"time"
 )
 
-func HelloServer(w http.ResponseWriter, req *http.Request) {
+func HelloServer(wr http.ResponseWriter, r *http.Request) {
 	time.Sleep(time.Second * 10)
-	io.WriteString(w, "hello, world!\n")
+	_, _ = wr.Write([]byte("hello, world!\n"))
 }
 
 func main() {

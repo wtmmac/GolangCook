@@ -1,6 +1,7 @@
 package main
 
 import (
+	"decimal"
 	"fmt"
 	"math"
 )
