@@ -8,7 +8,7 @@ type person struct {
 	age  int
 }
 
-// 比较两个人的年龄,返回年龄大的那个人,并且返回年龄差
+// Older 比较两个人的年龄,返回年龄大的那个人,并且返回年龄差
 // struct 也是传值的
 func Older(p1, p2 person) (person, int) {
 	if p1.age > p2.age { //比较p1和p2这两个人的年龄

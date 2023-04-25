@@ -7,7 +7,9 @@ import (
 )
 
 func MakeMem() []int {
-	mem := make([]int, 100*1024*1024)
+	// mem := make([]int, 100*1024*1024)
+	mem := make([]int, 1)
+	// mem = append(mem, 1)
 	return mem
 }
 

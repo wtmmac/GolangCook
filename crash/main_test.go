@@ -1,16 +1,17 @@
 package main
 
 import (
-	"encoding/binary"
 	"fmt"
 	"reflect"
 	"testing"
+	"unsafe"
 )
 
 func BenchmarkMem(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		mem := MakeMem()
-		fmt.Println(binary.Size(mem))
+		// fmt.Println(binary.Size(mem))
+		fmt.Println(unsafe.Sizeof(mem))
 	}
 }
 

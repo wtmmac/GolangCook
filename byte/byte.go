@@ -21,4 +21,10 @@ func main() {
 	fmt.Printf("RSV3:%x\n", RSV3)
 	fmt.Printf("OPCODE:0x%01x\n", OPCODE)
 	fmt.Printf("%02x\n", opcodeByte[0])
+
+	fmt.Println("========================")
+	fmt.Println(int16(1001))
+	int1 := int32(100001)
+	// print low byte
+	fmt.Println(byte(int1))
 }
