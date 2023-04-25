@@ -1,0 +1,21 @@
+// hello.proto
+syntax = "proto3";
+
+package api; // 包名
+
+option go_package="./;api";
+
+// The Hello service definition.
+service Hello {
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message
+message HelloReply {
+  string message = 1;
+}
