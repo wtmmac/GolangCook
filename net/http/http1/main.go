@@ -16,16 +16,14 @@ func main() {
 		return
 	}
 	defer resp.Body.Close()
+
 	body, err := ioutil.ReadAll(resp.Body)
+
 	fmt.Println(string(body))
 	fmt.Println(resp.StatusCode)
+
 	if resp.StatusCode == 200 {
 		fmt.Println("ok")
 	}
 
-	ttt()
-}
-
-func ttt() {
-	fmt.Println("asdf")
 }
