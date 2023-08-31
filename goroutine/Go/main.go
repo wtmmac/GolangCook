@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/wtmmac/GolangTest/goroutine/Go/GoWrapper"
+	"github.com/wtmmac/GolangCook/goroutine/Go/GoWrapper"
 	"time"
 )
 

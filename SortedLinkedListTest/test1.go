@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/wtmmac/GolangTest/SortedLinkedList"
-	"github.com/wtmmac/GolangTest/danmuCache2"
+	"github.com/wtmmac/GolangCook/SortedLinkedList"
+	"github.com/wtmmac/GolangCook/danmuCache2"
 	"unsafe"
 )
 

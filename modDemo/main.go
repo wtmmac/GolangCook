@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	models "github.com/wtmmac/GolangTest/modDemo/models"
+	models "github.com/wtmmac/GolangCook/modDemo/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

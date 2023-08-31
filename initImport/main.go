@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GolangTest/initImport/config"
-	_ "GolangTest/initImport/config"
+	"GolangCook/initImport/config"
+	_ "GolangCook/initImport/config"
 	"fmt"
 	"sync"
 )
