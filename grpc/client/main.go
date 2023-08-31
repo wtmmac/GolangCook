@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "github.com/wtmmac/GolangTest/grpc/api"
+	pb "github.com/wtmmac/GolangCook/grpc/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"time"

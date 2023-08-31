@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 )
-import pb "github.com/wtmmac/GolangTest/grpc/api"
+import pb "github.com/wtmmac/GolangCook/grpc/api"
 
 type HelloService struct{}
 

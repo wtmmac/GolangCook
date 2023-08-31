@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	pb "github.com/wtmmac/GolangTest/grpc/api"
-	"github.com/wtmmac/GolangTest/grpc/service"
+	pb "github.com/wtmmac/GolangCook/grpc/api"
+	"github.com/wtmmac/GolangCook/grpc/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net"
