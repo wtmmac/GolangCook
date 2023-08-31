@@ -1,9 +1,8 @@
 package main
 
 import (
-	"GolangCook/initImport/config"
-	_ "GolangCook/initImport/config"
 	"fmt"
+	"github.com/wtmmac/GolangCook/initImport/config"
 	"sync"
 )
 

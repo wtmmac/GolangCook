@@ -1,28 +1,19 @@
 package main
 
 import (
-	//"io"
-	"net/http"
-
 	"github.com/wtmmac/go.net/websocket"
+	"net/http"
 )
 
-// Echo the data received on the WebSocket.
+// EchoServer Echo the data received on the WebSocket.
 func EchoServer(ws *websocket.Conn) {
-	//io.Copy(ws, ws)
 	var err error
 	for {
-		//io.WriteString(ws, "asdf")
 		if err = websocket.Message.Send(ws, "asdf"); err != nil {
 			print("Can't send")
 			break
 		}
 	}
-
-	//	_, err := ws.Write([]byte("echo pong"))
-	//	if err != nil {
-	//		panic("EchoServer: " + err.Error())
-	//	}
 }
 
 // This example demonstrates a trivial echo server.

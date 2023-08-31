@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GolangTest/oop/video"
+	"github.com/wtmmac/GolangCook/oop/video"
 )
 
 func main() {
