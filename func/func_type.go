@@ -1,6 +1,6 @@
 package main
 
-// Define a function type
+// HandlerFunc Define a function type
 type HandlerFunc func(str string)
 
 // Process calls f(str).

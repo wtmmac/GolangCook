@@ -49,19 +49,21 @@ func (c *helloClient) SayHello(ctx context.Context, in *HelloRequest, opts ...gr
 }
 
 // HelloServer is the server API for Hello service.
-// All implementations should embed UnimplementedHelloServer
+// All implementations must embed UnimplementedHelloServer
 // for forward compatibility
 type HelloServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
+	mustEmbedUnimplementedHelloServer()
 }
 
-// UnimplementedHelloServer should be embedded to have forward compatible implementations.
+// UnimplementedHelloServer must be embedded to have forward compatible implementations.
 type UnimplementedHelloServer struct {
 }
 
 func (UnimplementedHelloServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
+func (UnimplementedHelloServer) mustEmbedUnimplementedHelloServer() {}
 
 // UnsafeHelloServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to HelloServer will

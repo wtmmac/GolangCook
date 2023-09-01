@@ -14,7 +14,7 @@ type Animal struct {
 	Age  int64
 }
 
-//https://gorm.io/zh_CN/docs/query.html
+// https://gorm.io/zh_CN/docs/query.html
 func main() {
 	db, err := gorm.Open("mysql", "root:root@/gormdemo?charset=utf8&parseTime=true&loc=Local")
 	if err != nil {
@@ -22,7 +22,7 @@ func main() {
 	}
 	defer db.Close()
 
-	//根据逐渐查询第一条记录
+	// 根据逐渐查询第一条记录
 	var animal Animal
 	db.First(&animal)
 	fmt.Println(animal)

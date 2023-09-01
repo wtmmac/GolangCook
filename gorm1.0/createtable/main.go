@@ -11,7 +11,7 @@ import (
 type User struct {
 	gorm.Model
 	UserId      int64 `gorm:"index"`
-	Birtheday   time.Time
+	Birthday    time.Time
 	Age         int           `gorm:"column:age"`
 	Name        string        `gorm:"size:255;index:idx_name_add_id"`
 	Num         int           `gorm:"AUTO_INCREMENT"`
@@ -22,7 +22,7 @@ type User struct {
 	Status      string        `gorm:"type:enum('published', 'pending', 'deleted');default:'pending'"`
 }
 
-//设置表名，默认是结构体的名的复数形式
+// TableName 设置表名，默认是结构体的名的复数形式
 func (User) TableName() string {
 	return "VIP_USER"
 }
@@ -34,9 +34,9 @@ func main() {
 	}
 	defer db.Close()
 
-	if db.HasTable(&User{}) { //判断表是否存在
-		db.AutoMigrate(&User{}) //存在就自动适配表，也就说原先没字段的就增加字段
+	if db.HasTable(&User{}) { // 判断表是否存在
+		db.AutoMigrate(&User{}) // 存在就自动适配表，也就说原先没字段的就增加字段
 	} else {
-		db.CreateTable(&User{}) //不存在就创建新表
+		db.CreateTable(&User{}) // 不存在就创建新表
 	}
 }
