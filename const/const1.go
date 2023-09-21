@@ -9,7 +9,5 @@ const (
 )
 
 func main() {
-
 	fmt.Println(e, f, g, h, i, j) //	0 1 1 2 2 4
-
 }
