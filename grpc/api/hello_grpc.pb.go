@@ -53,7 +53,7 @@ func (c *helloClient) SayHello(ctx context.Context, in *HelloRequest, opts ...gr
 // for forward compatibility
 type HelloServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
-	mustEmbedUnimplementedHelloServer()
+	// mustEmbedUnimplementedHelloServer()
 }
 
 // UnimplementedHelloServer must be embedded to have forward compatible implementations.

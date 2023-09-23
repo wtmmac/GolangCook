@@ -25,7 +25,7 @@ func test1() {
 
 // 确认子context的key是否覆盖父context
 func test2() {
-	fmt.Println("++test2++++++++++++++++++++=")
+	fmt.Println("\n++test2++++++++++++++++++++=")
 	ctx := context.Background()
 	var keyA string = "key"
 	ctxA := context.WithValue(ctx, keyA, "ctxA")
@@ -36,15 +36,27 @@ func test2() {
 	//fmt.Println(ctxC.Value(keyA)) // return empty
 }
 
-func test3(){
-	type favContextKey string  f := func(ctx context.Context, k favContextKey) {     if v := ctx.Value(k); v != nil {         fmt.Println("found value:", v)         return     }     fmt.Println("key not found:", k) }  k := favContextKey("language") ctx := context.WithValue(context.Background(), k, "Go")  f(ctx, k) f(ctx, favContextKey("color")) 
-// Output:
-// found value: Go
-// key not found: color
+func test3() {
+	fmt.Println("\n++test3++++++++++++++++++++=")
+	type favContextKey string
+	f := func(ctx context.Context, k favContextKey) {
+		if v := ctx.Value(k); v != nil {
+			fmt.Println("found value:", v)
+			return
+		}
+		fmt.Println("key not found:", k)
+	}
+	k := favContextKey("language")
+	ctx := context.WithValue(context.Background(), k, "Go")
+	f(ctx, k)
+	f(ctx, favContextKey("color"))
+	// Output:
+	// found value: Go
+	// key not found: color
 }
 
 func main() {
 	test1()
 	test2()
-
+	test3()
 }

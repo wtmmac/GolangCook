@@ -3,15 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
+
 	pb "github.com/wtmmac/GolangCook/grpc/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"time"
 )
 
 func myClient() {
 	fmt.Printf("%c[0;47;42m%s%c[0m\n", 0x1B, ">>>>>>>>>>>>>"+time.Now().String(), 0x1B)
-	conn, err := grpc.Dial("tonymac:3399", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(":3399", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		// handle error
 		panic(err)
