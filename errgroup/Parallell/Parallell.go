@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"golang.org/x/sync/errgroup"
 	"os"
+
+	"golang.org/x/sync/errgroup"
 )
 
 var (
@@ -13,8 +14,10 @@ var (
 	Video = fakeSearch("video")
 )
 
-type Result string
-type Search func(ctx context.Context, query string) (Result, error)
+type (
+	Result string
+	Search func(ctx context.Context, query string) (Result, error)
+)
 
 func fakeSearch(kind string) Search {
 	return func(_ context.Context, query string) (Result, error) {
@@ -52,5 +55,4 @@ func main() {
 	for _, result := range results {
 		fmt.Println(result)
 	}
-
 }

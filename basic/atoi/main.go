@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	var userId = "10010"
+	userId := "10010"
 	fmt.Println(reflect.TypeOf(userId))
 	_, err := strconv.Atoi(userId)
 	if err != nil {

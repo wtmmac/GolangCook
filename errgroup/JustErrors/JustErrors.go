@@ -9,10 +9,9 @@ import (
 
 func main() {
 	g := new(errgroup.Group)
-	var urls = []string{
+	urls := []string{
 		"http://www.golang.org/",
 		"http://www.google.com/",
-		"http://www.somestupidname.com/",
 	}
 	for _, url := range urls {
 		// Launch a goroutine to fetch the URL.
