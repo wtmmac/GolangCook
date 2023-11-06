@@ -4,7 +4,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -13,7 +12,6 @@ import (
 )
 
 func httpGet(http_url string) string {
-
 	if !strings.HasPrefix(http_url, "http") {
 		http_url = "http://" + http_url
 	}
@@ -21,11 +19,13 @@ func httpGet(http_url string) string {
 	// validate url
 	host, err := url.ParseRequestURI(http_url)
 	if err != nil {
+		fmt.Println(err)
 	}
 
 	// validate host
 	_, err = net.LookupIP(host.Host)
 	if err != nil {
+		fmt.Println(err)
 	}
 
 	client := &http.Client{
@@ -44,16 +44,20 @@ func httpGet(http_url string) string {
 	}
 
 	req, err := http.NewRequest("GET", http_url, nil)
-
 	if err != nil {
+		fmt.Println(err)
 	}
 
-	//gzip
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11")
+	// gzip
+	req.Header.Set(
+		"User-Agent",
+		"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11",
+	)
 	req.Header.Set("Accept-Encoding", "gzip")
 
 	resp, err := client.Do(req)
 	if err != nil {
+		fmt.Println(err)
 	}
 
 	defer resp.Body.Close()
@@ -68,14 +72,15 @@ func httpGet(http_url string) string {
 		reader = resp.Body
 		fmt.Println("No gzip")
 	}
-	//fmt.Println(reader)
-	body, _ := ioutil.ReadAll(reader)
+	// fmt.Println(reader)
+	body, _ := io.ReadAll(reader)
 	return string(body)
 }
+
 func main() {
-	var result = httpGet("http://www.baidu.com")
+	result := httpGet("http://www.baidu.com")
 	fmt.Println(result)
 
-	//var result2 = httpGet("https://auth.alipay.com/login/index.htm")
-	//fmt.Println(result2)
+	// var result2 = httpGet("https://auth.alipay.com/login/index.htm")
+	// fmt.Println(result2)
 }
