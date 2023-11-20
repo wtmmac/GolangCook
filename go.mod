@@ -3,6 +3,7 @@ module github.com/wtmmac/GolangCook
 go 1.17
 
 require (
+	github.com/PuerkitoBio/goquery v1.5.1
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/buger/jsonparser v1.1.1
@@ -26,6 +27,7 @@ require (
 )
 
 require (
+	github.com/andybalholm/cascadia v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/golang/protobuf v1.5.3 // indirect

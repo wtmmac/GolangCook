@@ -16,7 +16,7 @@ type Config struct {
 }
 
 func main() {
-	var cnf = Config{
+	cnf := Config{
 		Broker:        "amqp://guest:guest@localhost:5672/",
 		ResultBackend: "amqp",
 		Exchange:      "machinery_exchange",

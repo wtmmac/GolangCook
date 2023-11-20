@@ -1,6 +1,8 @@
 package main
 
-import "sync"
+import (
+	"sync"
+)
 
 type MyChannel struct {
 	C    chan struct{}
@@ -18,11 +20,10 @@ func (mc *MyChannel) SafeClose() {
 }
 
 func main() {
-	//fmt.Println(<-chan struct{})
-	//ch :=  make(<-chan struct{}) // 只读channel
-	//select {
-	//
-	//}
-
-
+	// fmt.Println("<-chan struct{}")
+	// ch := make(<-chan struct{}) // 只读channel
+	// select {
+	// case <-ch:
+	// 	fmt.Println("readed h")
+	// }
 }
