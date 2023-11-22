@@ -4,16 +4,19 @@ import (
 	"bufio"
 	"container/list"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/wtmmac/go.net/websocket"
 	"io"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/wtmmac/go.net/websocket"
 )
 
-var connid int
-var conns *list.List
+var (
+	connid int
+	conns  *list.List
+)
 
 type conn struct {
 	ws     *websocket.Conn
@@ -104,19 +107,19 @@ func ChatroomServer(ws *websocket.Conn) {
 	fmt.Printf("connected to liveid: %d\n", liveid)
 	conn_instance := &conn{ws: ws, liveid: liveid, uid: connid}
 	item := conns.PushBack(conn_instance)
-	//name := fmt.Sprintf("user%d", id)
-	//SendMessage(nil, fmt.Sprintf("welcome %s join\n", name))
+	// name := fmt.Sprintf("user%d", id)
+	// SendMessage(nil, fmt.Sprintf("welcome %s join\n", name))
 	r := bufio.NewReader(ws)
 	for {
 		data, err := r.ReadBytes('\n')
 		if err != nil {
-			//fmt.Printf("disconnected id: %d\n", id)
-			//SendMessage(nil, fmt.Sprintf("%s offline\n", name))
+			// fmt.Printf("disconnected id: %d\n", id)
+			// SendMessage(nil, fmt.Sprintf("%s offline\n", name))
 			conns.Remove(item)
 			return
 		}
 		fmt.Printf("%d: %s", connid, data)
-		//SendMessage(item, fmt.Sprintf("%s\t> %s", name, data), liveid)
+		// SendMessage(item, fmt.Sprintf("%s\t> %s", name, data), liveid)
 	}
 }
 
