@@ -87,6 +87,17 @@ func TestDictionarySearch(t *testing.T) {
 	})
 }
 
+func TestDelete(t *testing.T) {
+	key := "test"
+	content := "test content"
+	d := Dictionary{key: content}
+	d.Delete(key)
+	_, err := d.Search(key)
+	if err != ErrNotFound {
+		t.Errorf("Expected %q to be deleted", key)
+	}
+}
+
 func assertError(t testing.TB, got, want error) {
 	t.Helper()
 	if got != want {

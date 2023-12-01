@@ -46,6 +46,11 @@ func (d Dictionary) Update(key, value string) error {
 	return nil
 }
 
+func (d Dictionary) Delete(key string) {
+	delete(d, key)
+	// return nil
+}
+
 func (d Dictionary) Search(keyword string) (string, error) {
 	result, ok := d[keyword]
 
