@@ -48,6 +48,30 @@ func assertContent(t testing.TB, dictionary Dictionary, key, content string) {
 	}
 }
 
+func TestUpdate(t *testing.T) {
+	t.Run("existing word", func(t *testing.T) {
+		key := "test"
+		content := "this is just a test"
+		dictionary := Dictionary{key: content}
+		newContent := "new content"
+
+		err := dictionary.Update(key, newContent)
+
+		assertError(t, err, nil)
+		assertContent(t, dictionary, key, newContent)
+	})
+	t.Run("new word", func(t *testing.T) {
+		key := "test"
+		content := "this is just a test"
+		dictionary := Dictionary{}
+
+		err := dictionary.Update(key, content)
+
+		assertError(t, err, ErrWordDoesNotExist)
+	})
+
+}
+
 func TestDictionarySearch(t *testing.T) {
 	dictionary := Dictionary{"test": "this is just a test"}
 
