@@ -1,6 +1,8 @@
 package maps
 
-import "errors"
+import (
+	"errors"
+)
 
 func Search(dictionary map[string]string, keyword string) string {
 	return dictionary[keyword]
@@ -13,8 +15,18 @@ var (
 
 type Dictionary map[string]string
 
-func (d Dictionary) Add(key, value string) {
-	d[key] = value
+func (d Dictionary) Add(key, value string) error {
+	_, err := d.Search(key)
+	switch err {
+	case ErrNotFound:
+		d[key] = value
+	case nil:
+		return ErrWordExists
+	default:
+		return err
+	}
+
+	return nil
 }
 
 func (d Dictionary) Search(keyword string) (string, error) {
