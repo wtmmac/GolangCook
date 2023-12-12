@@ -4,17 +4,18 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/bitly/go-simplejson"
 	"io"
 	"io/ioutil"
 	"math"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/bitly/go-simplejson"
 )
 
 const pageSize = 1
-const url = "http://10.19.15.99:9200/video_push_sender_consumer_log_prod-2023.06.19/_search"
+const url = "http://10.19.15.99:9200/video_push_sender_consumer_log_prod-2023.12.10/_search"
 
 func main() {
 	json := esQueryDSL(0)
@@ -45,7 +46,7 @@ func esQueryDSL(page int) *simplejson.Json {
       "must": [
         {
           "query_string": {
-            "query": "\"com.sohu.push.channel.MeizuChannelPushSever [169]\"",
+            "query": "",
             "analyze_wildcard": true,
             "default_field": "*"
           }
