@@ -14,7 +14,7 @@ import (
 而标准库 json 反序列化时利用了反射，效率是比较低的，占据了大部分时间，
 因此两种方式最终的执行时间几乎没什么变化。但是内存占用差了一个数量级，
 使用了 sync.Pool 后，内存占用仅为未使用的 234/5096 = 1/22，对 GC 的影响就很大了。
- */
+*/
 func BenchmarkUnmarshal(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		stu := &Student{}
@@ -33,7 +33,7 @@ func BenchmarkUnmarshalWithPool(b *testing.B) {
 /**
 这个例子创建了一个 bytes.Buffer 对象池，而且每次只执行一个简单的 Write 操作，存粹的内存搬运工，
 耗时几乎可以忽略。而内存分配和回收的耗时占比较多，因此对程序整体的性能影响更大
- */
+*/
 
 var bufferPool = sync.Pool{
 	New: func() interface{} {
