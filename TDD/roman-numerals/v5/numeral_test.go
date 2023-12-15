@@ -58,6 +58,27 @@ func TestConvertToRoman(t *testing.T) {
 			want:      "V",
 			wantError: nil,
 		},
+		{"6 gets converted to VI",
+			args{
+				Arabic: 6,
+			},
+			"VI",
+			nil,
+		},
+		{"7 gets converted to VII",
+			args{
+				Arabic: 7,
+			},
+			"VII",
+			nil,
+		},
+		{"8 gets converted to VIII",
+			args{
+				Arabic: 8,
+			},
+			"VIII",
+			nil,
+		},
 	}
 
 	for _, tt := range tests {
