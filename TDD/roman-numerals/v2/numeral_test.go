@@ -2,34 +2,13 @@ package romanNumerals
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
-
-func TestRomanNumerals(t *testing.T) {
-	t.Run("1 gets converted to I", func(t *testing.T) {
-		got := ConverToRoman(1)
-
-		want := "I"
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})
-
-	t.Run("2 gets converted to II", func(t *testing.T) {
-		got := ConverToRoman(2)
-
-		want := "II"
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})
-
-}
 
 func TestConvertToRoman(t *testing.T) {
 	type args struct {
-		username string
+		Arabic int
 	}
 
 	tests := []struct {
@@ -39,16 +18,27 @@ func TestConvertToRoman(t *testing.T) {
 		wantError   error
 	}{
 		{
-			description: "",
-			args:        args{},
-			want:        "",
-			wantError:   nil,
+			description: "1 gets converted to I",
+			args: args{
+				Arabic: 1,
+			},
+			want:      "I",
+			wantError: nil,
+		},
+		{
+			description: "2 gets converted to II",
+			args: args{
+				Arabic: 2,
+			},
+			want:      "II",
+			wantError: nil,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.description, func(t *testing.T) {
-
+			got := ConverToRoman(tt.args.Arabic)
+			assert.Equal(t, tt.want, got, "should be equal")
 		})
 	}
 }
