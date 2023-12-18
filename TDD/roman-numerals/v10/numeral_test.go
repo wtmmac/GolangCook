@@ -2,7 +2,6 @@ package romanNumerals
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -55,50 +54,10 @@ func TestConvertToRoman(t *testing.T) {
 }
 
 func TestConvertingToArabic(t *testing.T) {
-	for _, tt := range cases[:4] {
+	for _, tt := range cases[:5] {
 		t.Run(fmt.Sprintf("%s converted to %d", tt.Roman, tt.Arabic), func(t *testing.T) {
 			got := ConverToArabic(tt.Roman)
 			assert.Equal(t, tt.Arabic, got, "should be equal")
 		})
 	}
-}
-
-func ConverToArabic(roman string) int {
-	total := 0
-	for range roman {
-		total++
-	}
-	return total
-}
-
-type RomanNumeral struct {
-	Value  int
-	Symbol string
-}
-
-var allRomanNumerals = []RomanNumeral{
-	{1000, "M"},
-	{900, "CM"},
-	{500, "D"},
-	{400, "CD"},
-	{100, "C"},
-	{90, "XC"},
-	{50, "L"},
-	{40, "XL"},
-	{10, "X"},
-	{9, "IX"},
-	{5, "V"},
-	{4, "IV"},
-	{1, "I"},
-}
-
-func ConverToRoman(arabic int) string {
-	var result strings.Builder
-	for _, numeral := range allRomanNumerals {
-		for arabic >= numeral.Value {
-			result.WriteString(numeral.Symbol)
-			arabic -= numeral.Value
-		}
-	}
-	return result.String()
 }
