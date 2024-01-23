@@ -37,16 +37,25 @@ func TestSecondHandVector(t *testing.T) {
 		point Point
 	}{
 		{args{simpleTime(0, 0, 30)}, Point{0, -1}},
+		{args{simpleTime(0, 0, 45)}, Point{-1, 0.00000001}},
 	}
 	for _, tt := range tests {
 		t.Run(testName(tt.args.t), func(t *testing.T) {
-			if got := secondHandPoint(tt.args.t); got != tt.point {
+			if got := secondHandPoint(tt.args.t); !roughlyEqualPoint(got, tt.point) {
 				t.Errorf("secondHandPoint() = %v, want %v", got, tt.point)
 			}
 		})
 	}
 }
+func roughlyEqualFloat64(a, b float64) bool {
+	const equalityThreshold = 1e-7
+	return math.Abs(a-b) < equalityThreshold
+}
 
+func roughlyEqualPoint(a, b Point) bool {
+	return roughlyEqualFloat64(a.X, b.X) &&
+		roughlyEqualFloat64(a.Y, b.Y)
+}
 func testName(t time.Time) string {
 	return t.Format("15:04:05")
 }
