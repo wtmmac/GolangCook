@@ -74,7 +74,7 @@ func topHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("topHandler.Zrang: ", err.Error())
 	}
 
-	var Tops = struct {
+	Tops := struct {
 		Google int
 		Baidu  int
 		Bing   int

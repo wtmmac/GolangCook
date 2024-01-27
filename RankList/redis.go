@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/hoisie/redis"
 	"sync"
+
+	"github.com/hoisie/redis"
 )
 
 var (
@@ -51,7 +52,7 @@ func Zrevrange(key string, start int, end int) (map[string]float64, error) {
 		return nil, err
 	}
 
-	var ret = make(map[string]float64)
+	ret := make(map[string]float64)
 	if len(bytes) > 0 {
 		for _, member := range bytes {
 			f, err := client.Zscore(key, member)
