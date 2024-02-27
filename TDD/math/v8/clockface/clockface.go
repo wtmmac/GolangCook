@@ -6,8 +6,8 @@ import (
 )
 
 type Point struct {
-	X float64
-	Y float64
+	X float64 `json:"x,omitempty"`
+	Y float64 `json:"y,omitempty"`
 }
 
 // func SecondHand(t time.Time) Point {
