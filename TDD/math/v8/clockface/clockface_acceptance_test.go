@@ -1,12 +1,12 @@
 package clockface_test
 
 import (
+	"bytes"
 	"encoding/xml"
-	"strings"
 	"testing"
 	"time"
 
-	"github.com/wtmmac/GolangCook/TDD/math/v8/clockface"
+	"github.com/wtmmac/GolangCook/TDD/math/v7/clockface"
 )
 
 type SVG struct {
@@ -34,29 +34,36 @@ type Circle struct {
 	R  float64 `xml:"r,attr"`
 }
 
-func TestSVGWriterAtMidnight(t *testing.T) {
-	tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
-	var b strings.Builder
-	clockface.SVGWriter(&b, tm)
-	got := b.String()
+func TestSVGWriterSecondHand(t *testing.T) {
+	cases := []struct {
+		time time.Time
+		line Line
+	}{
+		{
+			simpleTime(0, 0, 0),
+			Line{150, 150, 150, 60},
+		},
+		{
+			simpleTime(0, 0, 30),
+			Line{150, 150, 150, 240},
+		},
+	}
 
-	want := `<line x1="150" y1="150" x2="150.000" y2="60.000"`
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			b := bytes.Buffer{}
+			clockface.SVGWriter(&b, c.time)
 
-	if !strings.Contains(got, want) {
-		t.Errorf("Expected to find the second hand %v, in the SVG output %v", want, got)
+			svg := SVG{}
+			xml.Unmarshal(b.Bytes(), &svg)
+
+			if !containsLine(c.line, svg.Line) {
+				t.Errorf("Expected to find the second hand line %+v, in the SVG lines %+v", c.line, svg.Line)
+			}
+		})
 	}
 }
 
-func TestSVGWriterAt30Seconds(t *testing.T) {
-	tm := time.Date(1337, time.January, 1, 0, 0, 30, 0, time.UTC)
-
-	var b strings.Builder
-	clockface.SVGWriter(&b, tm)
-	got := b.String()
-
-	want := `<line x1="150" y1="150" x2="150.000" y2="240.000"`
-
-	if !strings.Contains(got, want) {
-		t.Errorf("Expected to find the second hand %v, in the SVG output %v", want, got)
-	}
+func simpleTime(hours, minutes, seconds int) time.Time {
+	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
 }
