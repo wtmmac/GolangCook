@@ -1,1 +1,0 @@
-func TestSVGWriterAt30Sec

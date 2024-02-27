@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/wtmmac/GolangCook/TDD/math/v7/clockface"
+	"github.com/wtmmac/GolangCook/TDD/math/v8/clockface"
 )
 
 type SVG struct {
@@ -64,6 +64,19 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	}
 }
 
+func containsLine(l Line, ls []Line) bool {
+	for _, line := range ls {
+		if line == l {
+			return true
+		}
+	}
+	return false
+}
+
 func simpleTime(hours, minutes, seconds int) time.Time {
 	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
+}
+
+func testName(t time.Time) string {
+	return t.Format("15:04:05")
 }
