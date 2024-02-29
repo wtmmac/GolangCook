@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/wtmmac/GolangCook/TDD/math/v10/clockface"
+	"github.com/wtmmac/GolangCook/TDD/math/v11/clockface"
 )
 
 type SVG struct {
