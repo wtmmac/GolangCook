@@ -28,12 +28,12 @@ M
 	)
 
 	fs := fstest.MapFS{
-		"hello world.md":  {data: []byte(firstBody)},
-		"hello world2.md": {data: []byte(secondBody)},
+		"hello world.md":  {Data: []byte(firstBody)},
+		"hello world2.md": {Data: []byte(secondBody)},
 	}
-	posts, err := blogposts.NewPostsFromFS(fs)
+	posts := blogposts.NewPostsFromFS(fs)
 
-	assertNoError(t, err)
+	assertPostsLength(t, posts, fs)
 }
 
 func assertNoError(t *testing.T, err error) {
