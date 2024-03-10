@@ -1,6 +1,7 @@
 package blogposts_test
 
 import (
+	"reflect"
 	"testing"
 	"testing/fstest"
 
@@ -39,5 +40,19 @@ func assertNoError(t *testing.T, err error) {
 	t.Helper()
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func assertPostsLength(t *testing.T, posts []blogposts.Post, fs fstest.MapFS) {
+	t.Helper()
+	if len(posts) != len(fs) {
+		t.Errorf("got %d posts, wanted %d posts", len(posts), len(fs))
+	}
+}
+
+func assertPost(t *testing.T, got blogposts.Post, want blogposts.Post) {
+	t.Helper()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %+v, want %+v", got, want)
 	}
 }
