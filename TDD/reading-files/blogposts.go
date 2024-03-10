@@ -1,7 +1,15 @@
 package blogposts
 
-import "testing/fstest"
+import (
+	"io/fs"
+	"testing/fstest"
+)
 
 func NewPostsFromFS(fileSystem fstest.MapFS) []Post {
-	return []Post{{}, {}}
+	dir, _ := fs.ReadDir(fileSystem, ".")
+	var posts []Post
+	for range dir {
+		posts = append(posts, Post{})
+	}
+	return posts
 }
