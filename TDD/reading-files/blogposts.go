@@ -3,10 +3,9 @@ package blogposts
 import (
 	"io"
 	"io/fs"
-	"testing/fstest"
 )
 
-func NewPostsFromFS(fileSystem fstest.MapFS) ([]Post, error) {
+func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
 	dir, err := fs.ReadDir(fileSystem, ".")
 	if err != nil {
 		return nil, err
@@ -29,6 +28,10 @@ func getPost(fileSystem fs.FS, f fs.DirEntry) (Post, error) {
 	}
 	defer postFile.Close()
 
+	return newPost(postFile)
+}
+
+func newPost(postFile fs.File) (Post, error) {
 	postData, err := io.ReadAll(postFile)
 	if err != nil {
 		return Post{}, err
