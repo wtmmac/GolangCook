@@ -31,7 +31,11 @@ M
 		"hello world.md":  {Data: []byte(firstBody)},
 		"hello world2.md": {Data: []byte(secondBody)},
 	}
-	posts := blogposts.NewPostsFromFS(fs)
+	posts, err := blogposts.NewPostsFromFS(fs)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	assertPostsLength(t, posts, fs)
 }
