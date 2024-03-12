@@ -1,11 +1,13 @@
 package blogposts
 
-import "io"
+import (
+	"bufio"
+	"io"
+)
 
 // Post represents a post on a blog
 type Post struct {
-	Title, Description, Body string
-	Tags                     []string
+	Title, Description string
 }
 
 const (
@@ -15,12 +17,15 @@ const (
 )
 
 func newPost(postFile io.Reader) (Post, error) {
-	postData, err := io.ReadAll(postFile)
-	if err != nil {
-		return Post{}, err
-	}
+	scanner := bufio.NewScanner(postFile)
 
-	var post = Post{Title: string(postData)[7:]}
+	scanner.Scan()
+	titleLine := scanner.Text()
+
+	scanner.Scan()
+	descriptionLine := scanner.Text()
+
+	var post = Post{Title: titleLine[7:], Description: descriptionLine[13:]}
 
 	return post, nil
 }
