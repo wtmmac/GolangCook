@@ -23,8 +23,8 @@ func newPost(postFile io.Reader) (Post, error) {
 		scanner.Scan()
 		return scanner.Text()
 	}
-	title := readLine()[7:]
-	description := readLine()[13:]
+	title := readLine()[len(titleSeparator):]
+	description := readLine()[len(descriptionSeparator):]
 	post := Post{Title: title, Description: description}
 
 	return post, nil
