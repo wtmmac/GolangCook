@@ -11,9 +11,11 @@ import (
 func TestNewBlogPosts(t *testing.T) {
 	const (
 		firstBody = `Title: Post 1
-Description: Description 1`
+Description: Description 1
+Tags: test, article`
 		secondBody = `Title: Post 2
-Description: Description 2`
+Description: Description 2
+Tags: test2, article2`
 	)
 
 	fs := fstest.MapFS{
@@ -31,6 +33,7 @@ Description: Description 2`
 	assertPost(t, posts[0], blogposts.Post{
 		Title:       "Post 1",
 		Description: "Description 1",
+		Tags:        []string{"test", "article"},
 	})
 }
 
