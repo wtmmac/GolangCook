@@ -43,7 +43,5 @@ func readBody(scanner *bufio.Scanner) string {
 	for scanner.Scan() {
 		fmt.Fprintln(&buf, scanner.Text())
 	}
-
-	body := strings.TrimSuffix(buf.String(), "\n")
-	return body
+	return strings.TrimSuffix(buf.String(), "\n")
 }
