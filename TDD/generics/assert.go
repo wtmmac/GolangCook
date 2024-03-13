@@ -2,16 +2,16 @@ package generics
 
 import "testing"
 
-func AssertEqual(t *testing.T, got, want int) {
+func AssertEqual[T comparable](t *testing.T, got, want T) {
 	t.Helper()
 	if got != want {
-		t.Errorf("got %d, want %d", got, want)
+		t.Errorf("got %v, want %v", got, want)
 	}
 }
 
-func AssertNotEqual(t *testing.T, got, want int) {
+func AssertNotEqual[T comparable](t *testing.T, got, want T) {
 	t.Helper()
 	if got == want {
-		t.Errorf("didn't want %d", got)
+		t.Errorf("didn't want %v", got)
 	}
 }
