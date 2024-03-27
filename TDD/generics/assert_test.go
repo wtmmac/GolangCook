@@ -15,3 +15,17 @@ func TestAssertFunctions(t *testing.T) {
 		AssertNotEqual(t, "hello", "Grace")
 	})
 }
+
+func AssertTure(t *testing.T, got bool) {
+	t.Helper()
+	if !got {
+		t.Errorf("got %v, want true", got)
+	}
+}
+
+func AssertFalse(t *testing.T, got bool) {
+	t.Helper()
+	if got {
+		t.Errorf("got %v, want false", got)
+	}
+}
