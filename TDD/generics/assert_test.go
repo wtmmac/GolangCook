@@ -16,6 +16,24 @@ func TestAssertFunctions(t *testing.T) {
 	})
 }
 
+func TestStack(t *testing.T) {
+	t.Run("interger stack", func(t *testing.T) {
+		myStackOfInts := new(StackOfInts)
+		// check stack is empty
+		AssertTure(t, myStackOfInts.IsEmpty())
+		// add a thing, then check it's not empty
+		myStackOfInts.Push(123)
+		AssertFalse(t, myStackOfInts.IsEmpty())
+		// add another thing, pop it back again
+		myStackOfInts.Push(456)
+		value, _ := myStackOfInts.Pop()
+		AssertEqual(t, value, 456)
+		value, _ = myStackOfInts.Pop()
+		AssertEqual(t, value, 123)
+		AssertTure(t, myStackOfInts.IsEmpty())
+	})
+}
+
 func AssertTure(t *testing.T, got bool) {
 	t.Helper()
 	if !got {
