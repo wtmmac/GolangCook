@@ -15,6 +15,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/hoisie/redis v0.0.0-20160730154456-b5c6e81454e0
 	github.com/jinzhu/gorm v1.9.16
+	github.com/leoantony72/goswift v1.1.0
 	github.com/mediocregopher/radix/v3 v3.8.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
@@ -40,7 +41,6 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
-	google.golang.org/genproto v0.0.0-20231212172506-995d672761c0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
