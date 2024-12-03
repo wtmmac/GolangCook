@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/bitly/go-simplejson"
@@ -24,7 +25,7 @@ func rangeTime() (startTime, endTime string) {
 
 	// 获取当前时间
 	now := time.Now()
-	beforeOneHour := now.Add(time.Duration(-1 * time.Hour))
+	beforeOneHour := now.Add(time.Duration(-3 * time.Hour))
 
 	nowInShanghai := now.In(location)
 	endTime = nowInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
@@ -37,12 +38,13 @@ func rangeTime() (startTime, endTime string) {
 func main() {
 	startTime, endTime := rangeTime()
 	json := esQueryDSL(startTime, endTime)
-	total, uids, err := parseTotalRecords(json)
+	total, uids, agg, err := parseTotalRecords(json)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("total: %d\n", total)
 	fmt.Printf("uids: %d\n", uids)
+	fmt.Printf("=====uri统计=====\n%s\n", agg)
 }
 
 func esQueryDSL(startTime, endTime string) *simplejson.Json {
@@ -74,7 +76,7 @@ func esQueryDSL(startTime, endTime string) *simplejson.Json {
 		}
   	},
 	"aggs": {
-		"uids": {
+		"uid": {
 			"cardinality": {
 				"field": "uid.keyword"
 			}
@@ -140,18 +142,44 @@ func esQueryDSL(startTime, endTime string) *simplejson.Json {
 	return json
 }
 
-func parseTotalRecords(js *simplejson.Json) (total, uids int, err error) {
+func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err error) {
 	if dataTotal, ok := js.Get("aggregations").Get("total").CheckGet("value"); ok {
 		total, err = dataTotal.Int()
 		if err != nil {
-			return total, uids, err
+			return total, uids, agg, err
 		}
 	}
-	if uidsTotal, ok := js.Get("aggregations").Get("uids").CheckGet("value"); ok {
+	if uidsTotal, ok := js.Get("aggregations").Get("uid").CheckGet("value"); ok {
 		uids, err = uidsTotal.Int()
 		if err != nil {
-			return total, uids, err
+			return total, uids, agg, err
 		}
 	}
-	return total, uids, nil
+
+	// 获取 aggregations -> agg_uri -> buckets
+	buckets := js.GetPath("aggregations", "agg_uri", "buckets")
+	if buckets == nil {
+		return total, uids, agg, fmt.Errorf("aggregations -> agg_uri -> buckets not found")
+	}
+
+	// 构建结果字符串
+	var result strings.Builder
+
+	// 遍历 buckets 并构建每个 bucket 的信息
+	for _, bucket := range buckets.MustArray() {
+		bucketMap := bucket.(map[string]interface{})
+		key := bucketMap["key"].(string)
+		docCount := bucketMap["doc_count"]
+
+		// 添加 key 和 doc_count 到结果字符串
+		result.WriteString(fmt.Sprintf("Key: %s, Doc Count: %s\n", key, docCount))
+
+		// 如果需要进一步处理 1 和 2 的 value
+		value1 := bucketMap["1"].(map[string]interface{})["value"]
+		value2 := bucketMap["2"].(map[string]interface{})["value"]
+		result.WriteString(fmt.Sprintf("uid: %s, clientIp: %s\n", value1, value2))
+		result.WriteString(strings.Repeat("-", 20) + "\n")
+	}
+
+	return total, uids, result.String(), nil
 }
