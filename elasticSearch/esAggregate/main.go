@@ -12,44 +12,33 @@ import (
 	"github.com/bitly/go-simplejson"
 )
 
-const pageSize = 10
-const url = "http://10.18.19.11:9200/logstash-api.my.tv.sohu.com-2024.12.03/_search"
+const url = "http://10.18.19.11:9200/logstash-api.my.tv.sohu.com-2024.12.03,logstash-api.my.tv.sohu.com-2024.12.02/_search"
 
-func rangeTime() (startTime, endTime string) {
-	// 设置时区为东八区（中国标准时间）
-	location, err := time.LoadLocation("Asia/Shanghai")
-	if err != nil {
-		fmt.Println("Error loading location:", err)
-		return
-	}
-
-	// 获取当前时间
-	now := time.Now()
-	beforeOneHour := now.Add(time.Duration(-3 * time.Hour))
-
-	nowInShanghai := now.In(location)
-	endTime = nowInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
-
-	beforeOneHourInShanghai := beforeOneHour.In(location)
-	startTime = beforeOneHourInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
-
-	return startTime, endTime
-}
 func main() {
-	startTime, endTime := rangeTime()
-	json := esQueryDSL(startTime, endTime)
+	url := GenerateURL()
+	fmt.Println("Generated URL:", url)
+
+	startTime, endTime, err := rangeTime()
+	if err != nil {
+		panic(err)
+	}
+	json, err := esQueryDSL(startTime, endTime)
+	if err != nil {
+		panic(err)
+	}
 	total, uids, agg, err := parseTotalRecords(json)
 	if err != nil {
 		panic(err)
 	}
+
 	fmt.Printf("total: %d\n", total)
 	fmt.Printf("uids: %d\n", uids)
 	fmt.Printf("=====uri统计=====\n%s\n", agg)
 }
 
-func esQueryDSL(startTime, endTime string) *simplejson.Json {
+func esQueryDSL(startTime, endTime string) (*simplejson.Json, error) {
 	queryDsl := fmt.Sprintf(`{
-  	"size": 0, 
+  	"size": 20, 
   	"query": {
 		"bool": {
 			"filter": [
@@ -110,6 +99,7 @@ func esQueryDSL(startTime, endTime string) *simplejson.Json {
 	}
 }`)
 
+	// fmt.Println(queryDsl)
 	var requestBody = []byte(queryDsl)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
@@ -124,7 +114,7 @@ func esQueryDSL(startTime, endTime string) *simplejson.Json {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -135,11 +125,11 @@ func esQueryDSL(startTime, endTime string) *simplejson.Json {
 
 	body, _ := io.ReadAll(resp.Body)
 	fmt.Println(string(body))
-	json, err1 := simplejson.NewJson(body)
-	if err1 != nil {
-		panic(err1.Error())
+	json, err := simplejson.NewJson(body)
+	if err != nil {
+		return nil, err
 	}
-	return json
+	return json, nil
 }
 
 func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err error) {
@@ -172,7 +162,7 @@ func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err er
 		docCount := bucketMap["doc_count"]
 
 		// 添加 key 和 doc_count 到结果字符串
-		result.WriteString(fmt.Sprintf("Key: %s, Doc Count: %s\n", key, docCount))
+		result.WriteString(fmt.Sprintf("uri: %s, Doc Count: %s\n", key, docCount))
 
 		// 如果需要进一步处理 1 和 2 的 value
 		value1 := bucketMap["1"].(map[string]interface{})["value"]
@@ -182,4 +172,46 @@ func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err er
 	}
 
 	return total, uids, result.String(), nil
+}
+
+func rangeTime() (startTime, endTime string, err error) {
+	location, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		return "", "", err
+	}
+
+	now := time.Now()
+	beforeOneHour := now.Add(time.Duration(-24 * time.Hour))
+
+	nowInShanghai := now.In(location)
+	endTime = nowInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
+
+	beforeOneHourInShanghai := beforeOneHour.In(location)
+	startTime = beforeOneHourInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
+
+	return startTime, endTime, nil
+}
+
+// GenerateURL 根据当前时间和倒推1小时的时间生成 URL
+func GenerateURL() string {
+	const baseURL = "http://10.18.19.11:9200/"
+	const indexPrefix = "logstash-api.my.tv.sohu.com-"
+	const searchPath = "/_search"
+
+	// 获取当前时间和倒推1小时的时间
+	now := time.Now()
+	hourAgo := now.Add(-24 * time.Hour)
+
+	// 格式化日期
+	currentDate := now.Format("2006.01.02")
+	hourAgoDate := hourAgo.Format("2006.01.02")
+
+	// 生成索引部分
+	indexPart := indexPrefix + currentDate
+	if currentDate != hourAgoDate {
+		indexPart += "," + indexPrefix + hourAgoDate
+	}
+
+	// 生成完整的 URL
+	return baseURL + indexPart + searchPath
 }
