@@ -12,7 +12,7 @@ import (
 	"github.com/bitly/go-simplejson"
 )
 
-const url = "http://10.18.19.11:9200/logstash-api.my.tv.sohu.com-2024.12.03,logstash-api.my.tv.sohu.com-2024.12.02/_search"
+// const url = "http://10.18.19.11:9200/logstash-api.my.tv.sohu.com-2024.12.03,logstash-api.my.tv.sohu.com-2024.12.02/_search"
 
 func main() {
 	url := GenerateURL()
@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	json, err := esQueryDSL(startTime, endTime)
+	json, err := esQueryDSL(startTime, endTime, url)
 	if err != nil {
 		panic(err)
 	}
@@ -36,9 +36,9 @@ func main() {
 	fmt.Printf("=====uri统计=====\n%s\n", agg)
 }
 
-func esQueryDSL(startTime, endTime string) (*simplejson.Json, error) {
+func esQueryDSL(startTime, endTime, url string) (*simplejson.Json, error) {
 	queryDsl := fmt.Sprintf(`{
-  	"size": 20, 
+  	"size": 0, 
   	"query": {
 		"bool": {
 			"filter": [
@@ -79,7 +79,7 @@ func esQueryDSL(startTime, endTime string) (*simplejson.Json, error) {
 			"terms": {
 				"field": "uri.keyword",
 				"order": {
-					"1": "desc"
+					"_count": "desc"
 				},
 				"size": 10
 			},
