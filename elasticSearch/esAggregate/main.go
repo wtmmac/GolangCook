@@ -9,19 +9,21 @@ import (
 	"strings"
 	"time"
 
+	_ "es/query"
+
 	"github.com/bitly/go-simplejson"
 )
 
 // const url = "http://10.18.19.11:9200/logstash-api.my.tv.sohu.com-2024.12.03,logstash-api.my.tv.sohu.com-2024.12.02/_search"
 
 func main() {
-	url := GenerateURL()
-	fmt.Println("Generated URL:", url)
-
 	startTime, endTime, err := rangeTime()
 	if err != nil {
 		panic(err)
 	}
+	url := GenerateURL()
+	fmt.Println("Generated URL:", url)
+
 	json, err := esQueryDSL(startTime, endTime, url)
 	if err != nil {
 		panic(err)
