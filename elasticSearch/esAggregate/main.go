@@ -2,108 +2,63 @@ package main
 
 import (
 	"bytes"
+	"es/query"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"strings"
-	"time"
-
-	_ "es/query"
 
 	"github.com/bitly/go-simplejson"
 )
 
-// const url = "http://10.18.19.11:9200/logstash-api.my.tv.sohu.com-2024.12.03,logstash-api.my.tv.sohu.com-2024.12.02/_search"
+// Colors
+const (
+	Reset       = "\033[0m"
+	Red         = "\033[31m"
+	Green       = "\033[32m"
+	Yellow      = "\033[33m"
+	Blue        = "\033[34m"
+	Magenta     = "\033[35m"
+	Cyan        = "\033[36m"
+	White       = "\033[37m"
+	BlueBold    = "\033[34;1m"
+	MagentaBold = "\033[35;1m"
+	RedBold     = "\033[31;1m"
+	YellowBold  = "\033[33;1m"
+)
 
 func main() {
-	startTime, endTime, err := rangeTime()
-	if err != nil {
-		panic(err)
+	if err := query.QueryManager.ExecuteAllQueries(ExecuteQuery); err != nil {
+		fmt.Println("Error executing queries:", err)
+	} else {
+		fmt.Println("All queries executed successfully.")
 	}
-	url := GenerateURL()
-	fmt.Println("Generated URL:", url)
+}
 
-	json, err := esQueryDSL(startTime, endTime, url)
+func ExecuteQuery(name, query, index string) error {
+	fmt.Printf("====== Task: %s\n", name)
+	// fmt.Printf("Executing query on index %s\n", index)
+	// fmt.Printf("%s\n", strings.ReplaceAll(query, "\t", "   "))
+
+	json, err := esQueryDSL(query, index)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	total, uids, agg, err := parseTotalRecords(json)
 	if err != nil {
-		panic(err)
+		return err
 	}
-
-	fmt.Printf("total: %d\n", total)
+	fmt.Printf(RedBold+"total: %d\n"+Reset, total)
 	fmt.Printf("uids: %d\n", uids)
-	fmt.Printf("=====uri统计=====\n%s\n", agg)
+	fmt.Printf("------ uri statistics ------\n%s\n", agg)
+
+	return nil
 }
 
-func esQueryDSL(startTime, endTime, url string) (*simplejson.Json, error) {
-	queryDsl := fmt.Sprintf(`{
-  	"size": 0, 
-  	"query": {
-		"bool": {
-			"filter": [
-				{
-					"range": {
-						"@timestamp": {
-						"format": "strict_date_optional_time",
-						"gte": "` + startTime + `",
-						"lte": "` + endTime + `"
-						}
-					}
-				},
-				{
-					"match_phrase": {
-						"uri": "/comment"
-					}
-				},
-				{
-					"match_phrase": {
-						"status": "404"
-					}
-				}
-			]
-		}
-  	},
-	"aggs": {
-		"uid": {
-			"cardinality": {
-				"field": "uid.keyword"
-			}
-		},
-		"total": {
-			"value_count": {
-				"field": "_index"
-			}
-		},
-		"agg_uri": {
-			"terms": {
-				"field": "uri.keyword",
-				"order": {
-					"_count": "desc"
-				},
-				"size": 10
-			},
-			"aggs": {
-				"1": {
-					"cardinality": {
-						"field": "uid.keyword"
-					}
-				},
-				"2": {
-					"cardinality": {
-						"field": "clientIp.keyword"
-					}
-				}
-			}
-		}
-	}
-}`)
-
-	// fmt.Println(queryDsl)
+func esQueryDSL(queryDsl, index string) (*simplejson.Json, error) {
 	var requestBody = []byte(queryDsl)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", index, bytes.NewBuffer(requestBody))
 	if err != nil {
 		panic(err)
 	}
@@ -126,7 +81,8 @@ func esQueryDSL(startTime, endTime, url string) (*simplejson.Json, error) {
 	}(resp.Body)
 
 	body, _ := io.ReadAll(resp.Body)
-	fmt.Println(string(body))
+	// fmt.Println(string(body))
+
 	json, err := simplejson.NewJson(body)
 	if err != nil {
 		return nil, err
@@ -148,25 +104,21 @@ func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err er
 		}
 	}
 
-	// 获取 aggregations -> agg_uri -> buckets
+	// aggregations -> agg_uri -> buckets
 	buckets := js.GetPath("aggregations", "agg_uri", "buckets")
 	if buckets == nil {
 		return total, uids, agg, fmt.Errorf("aggregations -> agg_uri -> buckets not found")
 	}
 
-	// 构建结果字符串
 	var result strings.Builder
 
-	// 遍历 buckets 并构建每个 bucket 的信息
 	for _, bucket := range buckets.MustArray() {
 		bucketMap := bucket.(map[string]interface{})
 		key := bucketMap["key"].(string)
 		docCount := bucketMap["doc_count"]
 
-		// 添加 key 和 doc_count 到结果字符串
 		result.WriteString(fmt.Sprintf("uri: %s, Doc Count: %s\n", key, docCount))
 
-		// 如果需要进一步处理 1 和 2 的 value
 		value1 := bucketMap["1"].(map[string]interface{})["value"]
 		value2 := bucketMap["2"].(map[string]interface{})["value"]
 		result.WriteString(fmt.Sprintf("uid: %s, clientIp: %s\n", value1, value2))
@@ -174,46 +126,4 @@ func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err er
 	}
 
 	return total, uids, result.String(), nil
-}
-
-func rangeTime() (startTime, endTime string, err error) {
-	location, err := time.LoadLocation("Asia/Shanghai")
-	if err != nil {
-		return "", "", err
-	}
-
-	now := time.Now()
-	beforeOneHour := now.Add(time.Duration(-24 * time.Hour))
-
-	nowInShanghai := now.In(location)
-	endTime = nowInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
-
-	beforeOneHourInShanghai := beforeOneHour.In(location)
-	startTime = beforeOneHourInShanghai.Format("2006-01-02T15:04:05.000Z07:00")
-
-	return startTime, endTime, nil
-}
-
-// GenerateURL 根据当前时间和倒推1小时的时间生成 URL
-func GenerateURL() string {
-	const baseURL = "http://10.18.19.11:9200/"
-	const indexPrefix = "logstash-api.my.tv.sohu.com-"
-	const searchPath = "/_search"
-
-	// 获取当前时间和倒推1小时的时间
-	now := time.Now()
-	hourAgo := now.Add(-24 * time.Hour)
-
-	// 格式化日期
-	currentDate := now.Format("2006.01.02")
-	hourAgoDate := hourAgo.Format("2006.01.02")
-
-	// 生成索引部分
-	indexPart := indexPrefix + currentDate
-	if currentDate != hourAgoDate {
-		indexPart += "," + indexPrefix + hourAgoDate
-	}
-
-	// 生成完整的 URL
-	return baseURL + indexPart + searchPath
 }

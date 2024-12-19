@@ -1,6 +1,6 @@
 package query
 
-const commentQueryDSL = `{
+const postsQueryDSL = `{
 	"size": 0,
 	"query": {
 		"bool": {
@@ -16,7 +16,7 @@ const commentQueryDSL = `{
 				},
 				{
 					"match_phrase": {
-						"uri": "/comment"
+						"uri": "/post"
 					}
 				},
 				{
@@ -63,7 +63,7 @@ const commentQueryDSL = `{
 }`
 
 func init() {
-	const indexPrefix = "logstash-api.my.tv.sohu.com-"
+	const indexPrefix = "logstash-posts.tv.sohu.com-"
 
-	QueryManager.BuildTimeRangeQuery("commentQueryDSL", indexPrefix, commentQueryDSL)
+	QueryManager.BuildTimeRangeQuery("postsQueryDSL", indexPrefix, postsQueryDSL)
 }
