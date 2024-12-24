@@ -36,24 +36,29 @@ func main() {
 	}
 }
 
-func ExecuteQuery(name, query, index string) error {
-	fmt.Printf("====== Task: %s\n", name)
+func ExecuteQuery(name, query, index string) (string, error) {
+	var builder strings.Builder
+	builder.WriteString(fmt.Sprintf("====== Task: %s\n", name))
+	// fmt.Printf("====== Task: %s\n", name)
 	// fmt.Printf("Executing query on index %s\n", index)
 	// fmt.Printf("%s\n", strings.ReplaceAll(query, "\t", "   "))
 
 	json, err := esQueryDSL(query, index)
 	if err != nil {
-		return err
+		return "", err
 	}
 	total, uids, agg, err := parseTotalRecords(json)
 	if err != nil {
-		return err
+		return "", err
 	}
-	fmt.Printf(RedBold+"total: %d\n"+Reset, total)
-	fmt.Printf("uids: %d\n", uids)
-	fmt.Printf("------ uri statistics ------\n%s\n", agg)
+	builder.WriteString(fmt.Sprintf(RedBold+"total: %d\n"+Reset, total))
+	// fmt.Printf(RedBold+"total: %d\n"+Reset, total)
+	builder.WriteString(fmt.Sprintf("uids: %d\n", uids))
+	// fmt.Printf("uids: %d\n", uids)
+	builder.WriteString(fmt.Sprintf("------ uri statistics ------\n%s\n", agg))
+	// fmt.Printf("------ uri statistics ------\n%s\n", agg)
 
-	return nil
+	return builder.String(), nil
 }
 
 func esQueryDSL(queryDsl, index string) (*simplejson.Json, error) {

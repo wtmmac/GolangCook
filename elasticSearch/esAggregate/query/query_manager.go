@@ -53,19 +53,23 @@ func (qm *queryManager) BuildTimeRangeQuery(name, indexPrefix, query string) {
 }
 
 // ExecuteAllQueries 遍历所有查询并执行它们
-func (qm *queryManager) ExecuteAllQueries(execFunc func(name, query, index string) error) error {
+func (qm *queryManager) ExecuteAllQueries(execFunc func(name, query, index string) (string, error)) error {
 	qm.mu.RLock()
 	defer qm.mu.RUnlock()
+	result := ""
 
 	for name, query := range qm.queries {
 		index, ok := qm.indexes[name]
 		if !ok {
 			return fmt.Errorf("index not found for query %s", name)
 		}
-		if err := execFunc(name, query, index); err != nil {
+		ret, err := execFunc(name, query, index)
+		if err != nil {
 			return fmt.Errorf("failed to execute query %s on index %s: %v", name, index, err)
 		}
+		result += ret
 	}
+	fmt.Println(result)
 	return nil
 }
 
