@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 
@@ -29,11 +30,23 @@ const (
 )
 
 func main() {
-	if err := query.QueryManager.ExecuteAllQueries(ExecuteQuery); err != nil {
+	result, err := query.QueryManager.ExecuteAllQueries(ExecuteQuery)
+	if err != nil {
 		fmt.Println("Error executing queries:", err)
-	} else {
-		fmt.Println("All queries executed successfully.")
+		os.Exit(0)
 	}
+
+	fmt.Println("All queries executed successfully.")
+	fmt.Println(result)
+	encodedString := url.QueryEscape(result)
+	fmt.Println("Original String:", encodedString)
+
+	resp, err := http.Get("http://index.tv.sohuno.com/alert/mail/send?title=testTitle&content=" + encodedString + "&receiver=tianmingwang@sohu-inc.com")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
 }
 
 func ExecuteQuery(name, query, index string) (string, error) {
@@ -51,11 +64,11 @@ func ExecuteQuery(name, query, index string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	builder.WriteString(fmt.Sprintf(RedBold+"total: %d\n"+Reset, total))
-	// fmt.Printf(RedBold+"total: %d\n"+Reset, total)
-	builder.WriteString(fmt.Sprintf("uids: %d\n", uids))
+	// builder.WriteString(fmt.Sprintf(RedBold+"total: %d\n"+Reset, total))
+	builder.WriteString(fmt.Sprintf("<font color='red'>total: %d</font><br>", total))
+	builder.WriteString(fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;uids: %d<br>", uids))
 	// fmt.Printf("uids: %d\n", uids)
-	builder.WriteString(fmt.Sprintf("------ uri statistics ------\n%s\n", agg))
+	builder.WriteString(fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;------ uri statistics ------<br>%s<br>", agg))
 	// fmt.Printf("------ uri statistics ------\n%s\n", agg)
 
 	return builder.String(), nil
@@ -122,12 +135,12 @@ func parseTotalRecords(js *simplejson.Json) (total, uids int, agg string, err er
 		key := bucketMap["key"].(string)
 		docCount := bucketMap["doc_count"]
 
-		result.WriteString(fmt.Sprintf("uri: %s, Doc Count: %s\n", key, docCount))
+		result.WriteString(fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;uri: %s, Doc Count: %s<br>", key, docCount))
 
 		value1 := bucketMap["1"].(map[string]interface{})["value"]
 		value2 := bucketMap["2"].(map[string]interface{})["value"]
-		result.WriteString(fmt.Sprintf("uid: %s, clientIp: %s\n", value1, value2))
-		result.WriteString(strings.Repeat("-", 20) + "\n")
+		result.WriteString(fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;uid: %s, clientIp: %s<br>", value1, value2))
+		result.WriteString("&nbsp;&nbsp;&nbsp;&nbsp;" + strings.Repeat("-", 20) + "<br>")
 	}
 
 	return total, uids, result.String(), nil

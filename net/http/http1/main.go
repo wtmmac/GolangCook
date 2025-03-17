@@ -1,9 +1,9 @@
-//基本的GET请求
+// 基本的GET请求
 package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 
 	fmt.Println(string(body))
 	fmt.Println(resp.StatusCode)
