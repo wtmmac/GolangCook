@@ -8,6 +8,7 @@ require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/buger/jsonparser v1.1.1
 	github.com/cloudflare/ahocorasick v0.0.0-20210425175752-730270c3e184
+	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/google/uuid v1.5.0
