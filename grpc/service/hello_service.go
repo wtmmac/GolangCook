@@ -2,15 +2,16 @@ package service
 
 import (
 	"context"
-	"github.com/wtmmac/GolangCook/grpc/api"
 	"time"
+
+	"github.com/wtmmac/GolangCook/grpc/api"
 )
 
 type HelloService struct{}
 
-func (s *HelloService) mustEmbedUnimplementedHelloServer() {
-	panic("implement me")
-}
+// func (s *HelloService) mustEmbedUnimplementedHelloServer() {
+// 	panic("implement me")
+// }
 
 func (s *HelloService) SayHello(c context.Context, r *api.HelloRequest) (*api.HelloReply, error) {
 	ret := new(api.HelloReply)
